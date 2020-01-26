@@ -1,3 +1,4 @@
+import _ from 'lodash-es';
 import moment from 'moment';
 import { PorImageRegistryModel } from 'Docker/models/porImageRegistry';
 
@@ -29,6 +30,8 @@ function ($q, $scope, $state, $transition$, $filter, $async, ExtensionService, C
     ContainerService.container($transition$.params().id)
     .then(function success(data) {
       var container = data;
+      // Sort ENV VARs (here, "key=value") to improve readability.
+      container.Config.Env = _.sortBy(container.Config.Env);
       $scope.container = container;
       $scope.container.edit = false;
       $scope.container.newContainerName = $filter('trimcontainername')(container.Name);
